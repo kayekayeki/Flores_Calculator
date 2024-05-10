@@ -1,72 +1,31 @@
-let input = document.getElementById('inputBox');
-let buttons = document.querySelectorAll('button');
-
-let string = ""; 
-let firstInput = null; 
-let operator = ""; 
-let lastButtonClicked = ""; 
-
-buttons.forEach(button => {
-    button.addEventListener('click', (e) => {
-        if (e.target.innerHTML === '=') {
-            if (firstInput !== null && operator !== "" && string !== "") {
-                let secondInput = parseFloat(string);
-                let result;
-                switch (operator) {
-                    case '+':
-                        result = firstInput + secondInput;
-                        break;
-                    case '-':
-                        result = firstInput - secondInput;
-                        break;
-                    case '*':
-                        result = firstInput * secondInput;
-                        break;
-                    case '/':
-                        result = firstInput / secondInput;
-                        break;
-                    case '%':
-                        result = firstInput * (secondInput / 100); 
-                        break;
-                }
-                if (!isNaN(result) && result.toString().length > 10) {
-                    input.value = "Error";
-                } else {
-                    input.value = result;
-                }
-                firstInput = result;
-                string = "";
-                operator = "";
+let flag=0;
+        let output = document.getElementById("ot");
+        function display(num){
+            if (flag==1)
+            {
+                output.value="num";
+                output.value=num;
+                flag=0
             }
-        } else if (e.target.innerHTML === 'AC') {
-            input.value = "";
-            string = "";
-            firstInput = null;
-            operator = "";
-        } else if (e.target.innerHTML === 'DEL') {
-            string = string.slice(0, -1);
-            input.value = string;
-        } else if (['+', '-', '*', '/', '%'].includes(e.target.innerHTML)) { 
-            operator = e.target.innerHTML;
-            if (string !== "") {
-                firstInput = parseFloat(string);
-            }
-            string = "";
-        } else if (e.target.innerHTML === '.') {
-            if (!string.includes('.')) {
-                if (string === "") {
-                    string += "0";
-                }
-                string += ".";
-                input.value = string;
-            }
-        } else {
-            if ((string === "" && e.target.innerHTML === "0") || (string === "0" && e.target.innerHTML === "0")) {
-            } else {
-                string += e.target.innerHTML;
-                input.value = string;
+            else{
+                output.value+= num;
+            }    
+        }
+        
+        function calculate(){
+            try {
+                output.value = eval(output.value.replace(/%/g, "/100"));
+                flag = 1;
+            } catch(err) {
+                output.value = "";
+                alert("INVALID");
             }
         }
-        lastButtonClicked = e.target.innerHTML; 
-    });
-});
+
+        function del(){
+            output.value = output.value.slice(0, -1);      
+        }
+        
+        function clr(){
+            output.value = "";
+        }
